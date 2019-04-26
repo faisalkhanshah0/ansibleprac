@@ -1,0 +1,16 @@
+---
+-
+  hosts: agent3
+  gather_facts: false
+  remote_user: ubuntu
+  become: true
+  become_user: root
+  become_method: sudo
+  tasks: 
+    - name: Install Python2
+      raw: test -e /usr/bin/python || (apt-get update && apt-get install -y python-minimal)
+    - name: Set authorized key taken from file
+      authorized_key:
+        user: ubuntu
+        state: present
+        key: "{{ lookup('file', '/home/faishal/.ssh/id_rsa.pub') }}"  
